@@ -1,0 +1,1728 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>24 días contigo ♡</title>
+
+    <style>
+        /* ==========================================
+           1. VARIABLES Y ESTILOS GENERALES
+        ========================================== */
+
+        :root {
+            --wine: #862b4b;
+            --wine-dark: #641c36;
+            --green: #30493d;
+            --cream: #fbf7ef;
+            --sage: #dce6d9;
+            --gold: #c5a16b;
+            --muted: #766b65;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at 15% 5%, #f7e9e6, transparent 35%),
+                var(--cream);
+            color: var(--green);
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 3px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        h1 {
+            font-size: clamp(40px, 7vw, 76px);
+            font-weight: 400;
+            margin: 16px 0;
+        }
+
+        h2 {
+            font-size: clamp(27px, 5vw, 40px);
+            font-weight: 400;
+            margin: 12px 0;
+        }
+
+        p {
+            line-height: 1.75;
+        }
+
+        .eyebrow {
+            font: 600 11px system-ui, sans-serif;
+            letter-spacing: 3px;
+            color: var(--wine);
+            text-transform: uppercase;
+        }
+
+        .lead {
+            color: var(--muted);
+        }
+
+        .tiny {
+            font: 12px system-ui, sans-serif;
+            color: #837b75;
+        }
+
+        /* ==========================================
+           2. PANTALLAS Y BOTONES
+        ========================================== */
+
+        .screen {
+            max-width: 1050px;
+            margin: auto;
+            min-height: 100vh;
+            padding: 55px 20px;
+            text-align: center;
+        }
+
+        .intro {
+            max-width: 580px;
+            margin: 12px auto 30px;
+            color: var(--muted);
+        }
+
+        .button {
+            background: var(--wine);
+            color: white;
+            border: 0;
+            border-radius: 30px;
+            padding: 13px 23px;
+            margin: 10px 5px;
+            box-shadow: 0 7px 15px #862b4b22;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .button:hover {
+            background: var(--wine-dark);
+            transform: translateY(-2px);
+        }
+
+        .button.alt {
+            background: white;
+            color: var(--wine);
+            border: 1px solid #e6d1d5;
+            box-shadow: none;
+        }
+
+        .button:disabled {
+            opacity: 0.65;
+            cursor: default;
+            transform: none;
+        }
+
+        .hero-heart {
+            font-size: 75px;
+            color: var(--wine);
+            margin-top: 12vh;
+            animation: pulse 2s infinite;
+        }
+
+        /* ==========================================
+           3. CALENDARIO DE 24 DÍAS
+        ========================================== */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 14px;
+            margin: 35px 0;
+        }
+
+        .day {
+            min-height: 132px;
+            border: 0;
+            border-radius: 10px;
+            box-shadow: 0 8px 22px #42322213;
+            position: relative;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+        }
+
+        .day:hover {
+            transform: translateY(-5px);
+        }
+
+        .day:nth-child(3n + 1) {
+            background: #f0dfc5;
+        }
+
+        .day:nth-child(3n + 2) {
+            background: var(--wine);
+            color: white;
+        }
+
+        .day:nth-child(3n) {
+            background: var(--sage);
+        }
+
+        .day.feature {
+            outline: 3px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        .day .num {
+            font-size: 38px;
+        }
+
+        .day .caption {
+            font: 12px system-ui, sans-serif;
+            opacity: 0.85;
+        }
+
+        .day .check {
+            position: absolute;
+            top: 7px;
+            right: 10px;
+            font-size: 14px;
+        }
+
+        /* ==========================================
+           4. VENTANAS EMERGENTES
+        ========================================== */
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: #201a20ae;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+            display: grid;
+            place-items: center;
+            padding: 15px;
+        }
+
+        .dialog {
+            position: relative;
+            background: #fffdf8;
+            border-radius: 15px;
+            width: min(630px, 100%);
+            max-height: 92vh;
+            overflow: auto;
+            padding: 35px clamp(18px, 5vw, 48px);
+            text-align: center;
+            box-shadow: 0 30px 90px #0004;
+            animation: rise 0.35s;
+        }
+
+        .close {
+            position: absolute;
+            right: 13px;
+            top: 10px;
+            border: 0;
+            background: none;
+            font-size: 29px;
+            color: var(--wine);
+        }
+
+        .big {
+            font-size: 65px;
+            margin: 15px;
+        }
+
+        /* ==========================================
+           5. FOTOGRAFÍAS Y VIDEOS
+        ========================================== */
+
+        .photo {
+            display: block;
+            width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin: 16px auto;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 26px;
+            box-shadow: 0 10px 24px #0002;
+            transform: rotate(-1deg);
+        }
+
+        /* ==========================================
+           6. CUPONES Y RESERVACIONES
+        ========================================== */
+
+        .ticket,
+        .coupon,
+        .panel {
+            background: #faf1e7;
+            border: 1px solid #dfc8b7;
+            border-radius: 12px;
+            padding: 23px;
+            margin: 20px auto;
+        }
+
+        .coupon {
+            border: 2px dashed var(--wine);
+            background: #fff3f5;
+        }
+
+        .coupon .stamp {
+            font: 700 12px system-ui, sans-serif;
+            letter-spacing: 2px;
+            color: var(--wine);
+        }
+
+        .result {
+            padding: 12px;
+            color: var(--wine);
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           7. JUEGOS Y OPCIONES
+        ========================================== */
+
+        .options {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .option {
+            padding: 14px;
+            border: 1px solid #e2cbc6;
+            background: white;
+            border-radius: 9px;
+            color: var(--green);
+        }
+
+        .option:hover,
+        .option.selected {
+            background: #f5e2e8;
+            border-color: var(--wine);
+        }
+
+        .progress {
+            height: 7px;
+            background: #eee0d6;
+            border-radius: 10px;
+            overflow: hidden;
+            max-width: 300px;
+            margin: 18px auto;
+        }
+
+        .progress > div {
+            height: 100%;
+            background: var(--wine);
+            transition: width 0.3s;
+        }
+
+        .flips {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .flip {
+            min-height: 100px;
+            border: 1px solid #dfc8b7;
+            border-radius: 9px;
+            background: #f5e5e5;
+            padding: 12px;
+        }
+
+        .flip:disabled {
+            cursor: default;
+            color: var(--green);
+        }
+
+        /* ==========================================
+           8. ANIMACIONES
+        ========================================== */
+
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+            top: -30px;
+            z-index: 30;
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes pulse {
+            50% {
+                transform: scale(1.12);
+            }
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ==========================================
+           9. DISEÑO RESPONSIVO
+        ========================================== */
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .day {
+                min-height: 112px;
+            }
+
+            .day .num {
+                font-size: 30px;
+            }
+
+            .dialog {
+                padding: 34px 18px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ======================================
+         1. PANTALLA DE BIENVENIDA
+    ======================================= -->
+
+    <section id="welcome" class="screen">
+
+        <div class="hero-heart">♡</div>
+
+        <div class="eyebrow">
+            Un regalo hecho para ti
+        </div>
+
+        <h1>24 días contigo ♡</h1>
+
+        <p class="intro">
+            No son solo 24 sobres. Son pequeños planes,
+            recuerdos, juegos y maneras de recordarte
+            lo especial que eres para mí.
+        </p>
+
+        <button class="button" id="start">
+            Abrir mi regalo ♡
+        </button>
+
+    </section>
+
+    <!-- ======================================
+         2. CALENDARIO
+    ======================================= -->
+
+    <section id="calendar" class="screen hidden">
+
+        <div class="eyebrow">
+            Diciembre de 2026 · de mí para ti
+        </div>
+
+        <h1>24 días contigo ♡</h1>
+
+        <p class="intro">
+            Un detalle nuevo cada día.
+            Algunas sorpresas se leen, otras se juegan…
+            y otras se viven juntos.
+        </p>
+
+        <div class="grid" id="grid"></div>
+
+        <p class="tiny">
+            Hecho con amor, para nosotros ♡
+        </p>
+
+    </section>
+
+    <!-- ======================================
+         3. VENTANA DE SORPRESAS
+    ======================================= -->
+
+    <div id="overlay" class="overlay hidden">
+
+        <article
+            class="dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
+        >
+
+            <button
+                class="close"
+                id="close"
+                aria-label="Cerrar"
+            >
+                ×
+            </button>
+
+            <div id="modalTag" class="eyebrow"></div>
+
+            <h2 id="modalTitle"></h2>
+
+            <div id="content"></div>
+
+            <button class="button alt" id="finish">
+                Volver al calendario ♡
+            </button>
+
+        </article>
+
+    </div>
+
+    <!-- ======================================
+         4. JAVASCRIPT
+    ======================================= -->
+
+    <script>
+        "use strict";
+
+        /* ======================================
+           CONFIGURACIÓN GENERAL
+        ====================================== */
+
+        const CONFIG = {
+            year: 2026,
+            preview: false
+        };
+
+        // preview: true permite probar todos los días.
+        // Cambia a false antes de compartir la app.
+
+        const $ = (id) => document.getElementById(id);
+
+        /* ======================================
+           CONFIGURACIÓN DE LOS 24 DÍAS
+        ====================================== */
+
+        const days = [
+
+            // DÍA 01
+            {
+                type: "letter",
+                title: "Esta historia empieza contigo",
+                text:
+                    "Mi amor, preparé este calendario pensando en nosotros. " +
+                    "No quiero que solo abras sobres: quiero regalarte momentos, " +
+                    "recuerdos y pequeñas razones para sonreír. " +
+                    "Gracias por formar parte de mi vida. Esto apenas comienza. ♡"
+            },
+
+            // DÍA 02
+            {
+                type: "photo",
+                title: "Nuestra primera foto",
+                text:
+                    "Una imagen puede guardar tantas cosas: los nervios, " +
+                    "las sonrisas y todo lo que todavía no sabíamos " +
+                    "que íbamos a vivir.",
+                file: "fotos/dia02.jpeg"
+            },
+
+            // DÍA 03
+            {
+                type: "flip",
+                title: "Pequeñas cosas que amo de ti",
+                items: [
+                    "Tu sonrisa me alegra el día.",
+                    "Me encanta escucharte contarme tus cosas.",
+                    "Admiro tu forma de seguir adelante.",
+                    "Me gusta compartir hasta los planes más sencillos contigo."
+                ]
+            },
+
+            // DÍA 04
+            {
+                type: "quiz",
+                title: "Nuestro pequeño quiz",
+                questions: [
+                    {
+                        q: "¿Qué plan prefiero si estamos juntos?",
+                        options: [
+                            "Una tarde disfrutando de nuestra compañía",
+                            "Ignorarnos",
+                            "No hablar"
+                        ],
+                        answer: 0
+                    },
+                    {
+                        q: "¿Qué quiero regalarte con este calendario?",
+                        options: [
+                            "Tareas",
+                            "Momentos especiales",
+                            "Un examen"
+                        ],
+                        answer: 1
+                    },
+                    {
+                        q: "¿Qué importa más en una cita?",
+                        options: [
+                            "Que todo sea perfecto",
+                            "Que sea carísima",
+                            "Que ambos la disfrutemos"
+                        ],
+                        answer: 2
+                    }
+                ]
+            },
+
+            // DÍA 05
+            {
+                type: "flip",
+                title: "10 razones para elegirte",
+                items: [
+                    "Por tu risa.",
+                    "Por tu mirada.",
+                    "Por tu cariño.",
+                    "Por tu manera de pensar.",
+                    "Por los recuerdos que tenemos.",
+                    "Por tu valentía.",
+                    "Por las cosas que aprendo de ti.",
+                    "Por tus sueños.",
+                    "Por nuestras conversaciones.",
+                    "Porque eres tú."
+                ]
+            },
+
+            // DÍA 06
+            {
+                type: "coupon",
+                title: "Nuestra cita de ramen 🍜",
+                coupon: "VALE POR UNA CITA DE RAMEN",
+                text:
+                    "Tú eliges el día que nos venga bien. " +
+                    "Yo pongo las ganas de verte y compartir " +
+                    "una comida deliciosa contigo.",
+                code: "RAMEN-06"
+            },
+
+            // DÍA 07 - ANIVERSARIO
+            {
+                type: "anniversary",
+                title: "¡Felices 10 meses, mi amor! ❤️",
+                text:
+                    "Hoy celebramos 10 meses de novios. " +
+                    "Han sido meses de risas, aprendizajes, " +
+                    "recuerdos y momentos importantes. " +
+                    "Quiero seguir construyendo contigo una relación " +
+                    "en la que ambos nos sintamos queridos, escuchados y felices. " +
+                    "Gracias por compartir esta historia conmigo. " +
+                    "Te amo muchísimo.",
+                file: "fotos/aniversario10.jpeg"
+            },
+
+            // DÍA 08
+            {
+                type: "date",
+                title: "Tú eliges nuestra próxima cita",
+                text:
+                    "Esta vez quiero que tú decidas el plan. " +
+                    "No importa cuál elijas: lo bonito será hacerlo juntos.",
+                choices: [
+                    "🎬 Cine y palomitas",
+                    "☕ Cafecito y una caminata",
+                    "🧺 Picnic romántico",
+                    "🎨 Una tarde creativa"
+                ]
+            },
+
+            // DÍA 09
+            {
+                type: "gallery",
+                title: "Nuestro álbum secreto",
+                text:
+                    "Algunas fotografías merecen su propio rincón. " +
+                    "Estas son parte de los recuerdos que quiero guardar contigo.",
+                files: [
+                    "fotos/dia09a.jpeg",
+                    "fotos/dia09b.jpeg",
+                    "fotos/dia09c.jpeg"
+                ]
+            },
+
+            // DÍA 10
+            {
+                type: "coupon",
+                title: "Hoy te toca ser consentida",
+                coupon: "VALE POR UN DÍA DE MIMOS",
+                text:
+                    "Tú eliges: abrazos, tu antojo favorito " +
+                    "o un plan tranquilo juntos. " +
+                    "Sin prisas y con mucho cariño.",
+                code: "MIMOS-10"
+            },
+
+            // DÍA 11
+            {
+                type: "video",
+                title: "Mi monento favorito",
+                text:
+                    "Hay momentos que quiero volver a vivir una y otra vez. " +
+                    "Aquí van algunos de mis favoritos. Incluyendo la primera vez que nos vimos",
+                file: "videos/dia11.mp4"
+            },
+
+            // DÍA 12
+            {
+                type: "date",
+                title: "Una cita en casa",
+                text:
+                    "Un plan sencillo puede convertirse en uno de nuestros favoritos. " +
+                    "¿Cuál te gustaría?",
+                choices: [
+                    "🍕 Cocinar algo juntos",
+                    "🍿 Maratón de películas",
+                    "🎲 Juegos y botanas",
+                    "🍪 Hornear un postre"
+                ]
+            },
+
+            // DÍA 13
+            {
+                type: "photo",
+                title: "Nuestra primera cita",
+                text:
+                    "Me gusta recordar ese día y pensar en todo lo que vino después. " +
+                    "Si pudiera guardar un instante en una cajita, " +
+                    "sería uno de esos.",
+                file: "fotos/dia13.jpeg"
+            },
+
+            // DÍA 14
+            {
+                type: "either",
+                title: "¿Qué prefieres conmigo?",
+                questions: [
+                    [
+                        "¿Qué plan elegirías?",
+                        "Ver un atardecer juntos",
+                        "Salir a desayunar"
+                    ],
+                    [
+                        "¿Qué recuerdo crearíamos?",
+                        "Una foto espontánea",
+                        "Una carta escrita a mano"
+                    ],
+                    [
+                        "¿Qué cita te gustaría más?",
+                        "Una aventura sorpresa",
+                        "Una tarde tranquila"
+                    ]
+                ]
+            },
+
+            // DÍA 15
+            {
+                type: "wheel",
+                title: "La ruleta de las citas",
+                choices: [
+                    "🍦 Ir por un helado",
+                    "🎬 Noche de película",
+                    "🍜 Cita de comida",
+                    "🌅 Ver el atardecer",
+                    "☕ Una tarde de café",
+                    "🧺 Picnic juntos"
+                ]
+            },
+
+            // DÍA 16
+            {
+                type: "flip",
+                title: "Cosas que admiro de ti",
+                items: [
+                    "La fuerza con la que enfrentas tus días.",
+                    "La forma en que expresas lo que sientes.",
+                    "Tu autenticidad.",
+                    "Tus ganas de crecer.",
+                    "Todas esas cosas que te hacen única.",
+                    "La persona en la que te estás convirtiendo."
+                ]
+            },
+
+            // DÍA 17
+            {
+                type: "video",
+                title: "Desde mi corazón",
+                text:
+                    "Quise decirte algunas cosas con mi propia voz. " +
+                    "Dale play cuando tengas un ratito para ti. ♡",
+                file: "videos/dia17.mp4"
+            },
+
+            // DÍA 18
+            {
+                type: "flowers",
+                title: "Un ramo que no se marchita",
+                text:
+                    "No puedo enviarte flores por la pantalla, " +
+                    "pero sí un jardín de pequeños deseos: " +
+                    "que sonrías, que descanses y que nunca olvides cuánto vales."
+            },
+
+            // DÍA 19
+            {
+                type: "countdown",
+                title: "Mañana tenemos un plan especial",
+                text:
+                    "Hay una sorpresa preparada para nosotros. " +
+                    "Solo te pido que vengas con ganas de pasarla bonito."
+            },
+
+            // DÍA 20 - RESERVACIÓN
+            {
+                type: "reservation",
+                title: "Nuestra cita especial en Domu Sushi 🍣",
+                text:
+                    "Hoy quiero invitarte a disfrutar una tarde especial. " +
+                    "Ya preparé nuestra reservación; " +
+                    "lo que más me emociona es compartir ese momento contigo."
+            },
+
+            // DÍA 21
+            {
+                type: "gallery",
+                title: "Nuestro recuerdo de ayer",
+                text:
+                    "Después de nuestra cita podemos guardar aquí " +
+                    "nuestras fotos favoritas. " +
+                    "Un pequeño álbum de un día que espero recordar con una sonrisa.",
+                files: [
+                    "fotos/dia21a.jpeg",
+                    "fotos/dia21b.jpeg"
+                ]
+            },
+
+            // DÍA 22
+            {
+                type: "date",
+                title: "Elige nuestra próxima aventura",
+                text:
+                    "Tienes tres opciones para una próxima cita. " +
+                    "Elige la que más te ilusione y la planeamos juntos.",
+                choices: [
+                    "🌳 Un paseo y fotos",
+                    "🍰 Ir por un postre",
+                    "🎨 Una actividad nueva juntos"
+                ]
+            },
+
+            // DÍA 23
+            {
+                type: "letter",
+                title: "Una promesa para nosotros",
+                text:
+                    "Quiero seguir aprendiendo a escucharte, " +
+                    "a cuidarnos y a compartir momentos en los que " +
+                    "los dos nos sintamos tranquilos y felices. " +
+                    "No prometo que todo sea perfecto, " +
+                    "pero sí poner cariño y voluntad " +
+                    "en lo que construimos juntos."
+            },
+
+            // DÍA 24
+            {
+                type: "final",
+                title: "Feliz Navidad, mi amor 🎄",
+                text:
+                    "Llegamos al último sobre. " +
+                    "Gracias por abrir cada detalle " +
+                    "y por regalarme tantos recuerdos. " +
+                    "Mi deseo es que nunca nos falten las ganas " +
+                    "de compartir, reír, crecer y cuidarnos. " +
+                    "Te amo muchísimo. " +
+                    "Feliz Navidad, mi niña hermosa. ❤️"
+            }
+        ];
+
+        /* ======================================
+           ALMACENAMIENTO LOCAL
+        ====================================== */
+
+        let opened = [];
+
+        try {
+            opened = JSON.parse(
+                localStorage.getItem("calendario_pro_2026") || "[]"
+            );
+
+            if (!Array.isArray(opened)) {
+                opened = [];
+            }
+        } catch {
+            opened = [];
+        }
+
+        function getRedeemed() {
+            try {
+                return JSON.parse(
+                    localStorage.getItem("cupones_2026") || "{}"
+                );
+            } catch {
+                return {};
+            }
+        }
+
+        function saveLocal(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch {
+                // La aplicación puede seguir funcionando
+                // aunque el navegador bloquee el almacenamiento.
+            }
+        }
+
+        /* ======================================
+           FUNCIONES AUXILIARES
+        ====================================== */
+
+        function element(tag, text, className) {
+            const node = document.createElement(tag);
+
+            if (text !== undefined) {
+                node.textContent = text;
+            }
+
+            if (className) {
+                node.className = className;
+            }
+
+            return node;
+        }
+
+        function paragraph(parent, text, className) {
+            parent.append(
+                element("p", text, className)
+            );
+        }
+
+        function button(parent, text, callback, className = "button") {
+            const node = element("button", text, className);
+
+            node.onclick = callback;
+
+            parent.append(node);
+
+            return node;
+        }
+
+        function picture(parent, path) {
+            const img = element("img", undefined, "photo polaroid");
+
+            img.src = path;
+            img.alt = "Nuestro recuerdo";
+
+            img.onerror = () => {
+                img.replaceWith(
+                    element(
+                        "p",
+                        "Aquí aparecerá tu fotografía: " + path,
+                        "tiny"
+                    )
+                );
+            };
+
+            parent.append(img);
+        }
+
+        function addVideo(parent, path) {
+            const video = element("video", undefined, "photo");
+
+            video.controls = true;
+            video.playsInline = true;
+            video.src = path;
+
+            video.onerror = () => {
+                video.replaceWith(
+                    element(
+                        "p",
+                        "Agrega el video: " + path,
+                        "tiny"
+                    )
+                );
+            };
+
+            parent.append(video);
+        }
+
+        /* ======================================
+           DESBLOQUEO DE DÍAS
+        ====================================== */
+
+        function available(day) {
+            return CONFIG.preview ||
+                new Date() >= new Date(CONFIG.year, 11, day);
+        }
+
+        /* ======================================
+           GENERAR CALENDARIO
+        ====================================== */
+
+        function renderCalendar() {
+            const grid = $("grid");
+
+            grid.replaceChildren();
+
+            days.forEach((day, index) => {
+                const number = index + 1;
+
+                const featured = [7, 20, 24].includes(number);
+
+                const card = element(
+                    "button",
+                    undefined,
+                    "day" + (featured ? " feature" : "")
+                );
+
+                const numberLabel = element(
+                    "span",
+                    String(number).padStart(2, "0"),
+                    "num"
+                );
+
+                let description = "Abrir sorpresa";
+
+                if (!available(number)) {
+                    description = "🔒 Bloqueado";
+                } else if (number === 7) {
+                    description = "Abrir sorpresa";
+                } else if (number === 20) {
+                    description = "Abrir sorpresa";
+                } else if (number === 24) {
+                    description = "Navidad";
+                }
+
+                const caption = element(
+                    "span",
+                    description,
+                    "caption"
+                );
+
+                card.append(numberLabel, caption);
+
+                if (opened.includes(number)) {
+                    card.append(
+                        element("span", "♡", "check")
+                    );
+                }
+
+                card.onclick = () => openDay(number);
+
+                grid.append(card);
+            });
+        }
+
+        /* ======================================
+           VENTANAS EMERGENTES
+        ====================================== */
+
+        function showModal(tag, title, renderContent) {
+            $("modalTag").textContent = tag;
+            $("modalTitle").textContent = title;
+
+            $("content").replaceChildren();
+
+            renderContent($("content"));
+
+            $("overlay").classList.remove("hidden");
+
+            $("close").focus();
+        }
+
+        function closeModal() {
+            $("overlay").classList.add("hidden");
+        }
+
+        function showLockedDay(day) {
+            showModal(
+                "UNA SORPRESA PARA TI",
+                "Todavía no, mi amor ♡",
+                (content) => {
+                    content.append(
+                        element("div", "🔒", "big")
+                    );
+
+                    paragraph(
+                        content,
+                        "Este sobre guarda un secreto para ti.\n\n" +
+                        "Podrás descubrirlo el " +
+                        day +
+                        " de diciembre de " +
+                        CONFIG.year +
+                        ".\n\n" +
+                        "Las cosas bonitas también merecen su tiempo. ❤️",
+                        "lead"
+                    );
+                }
+            );
+        }
+
+        /* ======================================
+           ANIMACIÓN DE CORAZONES
+        ====================================== */
+
+        function celebrate() {
+            if (
+                matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                ).matches
+            ) {
+                return;
+            }
+
+            for (let i = 0; i < 14; i++) {
+                const heart = element(
+                    "span",
+                    i % 2 ? "♡" : "♥",
+                    "confetti"
+                );
+
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.fontSize =
+                    (14 + Math.random() * 19) + "px";
+                heart.style.color = "#862b4b";
+                heart.style.animationDelay =
+                    Math.random() + "s";
+
+                document.body.append(heart);
+
+                setTimeout(() => heart.remove(), 4500);
+            }
+        }
+
+        /* ======================================
+           CUPONES CANJEABLES
+        ====================================== */
+
+        function showCoupon(content, surprise) {
+            const coupon = element(
+                "div",
+                undefined,
+                "coupon"
+            );
+
+            coupon.append(
+                element(
+                    "div",
+                    "CUPÓN EXCLUSIVO ♡",
+                    "stamp"
+                ),
+                element(
+                    "h2",
+                    surprise.coupon
+                )
+            );
+
+            paragraph(coupon, surprise.text);
+
+            paragraph(
+                coupon,
+                "Código: " + surprise.code,
+                "tiny"
+            );
+
+            content.append(coupon);
+
+            const status = element("p", "", "result");
+
+            content.append(status);
+
+            const redeemButton = button(
+                content,
+                "Canjear mi cupón ♡",
+                () => {
+                    const all = getRedeemed();
+
+                    if (all[surprise.code]) {
+                        return;
+                    }
+
+                    all[surprise.code] = new Date().toISOString();
+
+                    saveLocal("cupones_2026", all);
+
+                    update();
+                }
+            );
+
+            function update() {
+                const redeemed = getRedeemed()[surprise.code];
+
+                status.textContent = redeemed
+                    ? "♡ Cupón canjeado. ¡Ahora toca disfrutarlo juntos!"
+                    : "Puedes guardarlo y canjearlo cuando acordemos el plan.";
+
+                redeemButton.disabled = Boolean(redeemed);
+
+                redeemButton.textContent = redeemed
+                    ? "Cupón canjeado ✓"
+                    : "Canjear mi cupón ♡";
+            }
+
+            update();
+        }
+
+        /* ======================================
+           JUEGO DE PREGUNTAS
+        ====================================== */
+
+        function showQuiz(content, surprise) {
+            let currentQuestion = 0;
+            let score = 0;
+
+            const area = element("div");
+
+            content.append(area);
+
+            function draw() {
+                area.replaceChildren();
+
+                if (currentQuestion === surprise.questions.length) {
+                    paragraph(
+                        area,
+                        "¡Terminaste! " +
+                        score +
+                        " de " +
+                        surprise.questions.length +
+                        " respuestas correctas. ❤️",
+                        "result"
+                    );
+
+                    button(area, "Jugar otra vez", () => {
+                        currentQuestion = 0;
+                        score = 0;
+                        draw();
+                    });
+
+                    return;
+                }
+
+                const question = surprise.questions[currentQuestion];
+
+                paragraph(area, question.q);
+
+                const progress = element(
+                    "div",
+                    undefined,
+                    "progress"
+                );
+
+                const fill = element("div");
+
+                fill.style.width =
+                    (currentQuestion / surprise.questions.length * 100) + "%";
+
+                progress.append(fill);
+
+                area.append(progress);
+
+                const options = element(
+                    "div",
+                    undefined,
+                    "options"
+                );
+
+                question.options.forEach((option, index) => {
+                    button(
+                        options,
+                        option,
+                        () => {
+                            if (index === question.answer) {
+                                score++;
+                            }
+
+                            currentQuestion++;
+                            draw();
+                        },
+                        "option"
+                    );
+                });
+
+                area.append(options);
+            }
+
+            draw();
+        }
+
+        /* ======================================
+           TARJETAS CON MENSAJES
+        ====================================== */
+
+        function showFlips(content, surprise) {
+            paragraph(
+                content,
+                "Toca cada tarjeta para descubrir su mensaje.",
+                "lead"
+            );
+
+            const grid = element(
+                "div",
+                undefined,
+                "flips"
+            );
+
+            surprise.items.forEach((message, index) => {
+                const card = element(
+                    "button",
+                    "♡ " + (index + 1),
+                    "flip"
+                );
+
+                card.onclick = () => {
+                    card.textContent = message;
+                    card.disabled = true;
+                };
+
+                grid.append(card);
+            });
+
+            content.append(grid);
+        }
+
+        /* ======================================
+           ELECCIÓN DE CITAS
+        ====================================== */
+
+        function showChoices(content, surprise) {
+            paragraph(content, surprise.text, "lead");
+
+            const options = element(
+                "div",
+                undefined,
+                "options"
+            );
+
+            const result = element(
+                "p",
+                "",
+                "result"
+            );
+
+            surprise.choices.forEach((choice) => {
+                const optionButton = button(
+                    options,
+                    choice,
+                    () => {
+                        options.querySelectorAll(".option").forEach((item) => {
+                            item.classList.remove("selected");
+                        });
+
+                        optionButton.classList.add("selected");
+
+                        result.textContent =
+                            "Elegiste: " +
+                            choice +
+                            ". ♡ ¡Lo planeamos juntos!";
+                    },
+                    "option"
+                );
+            });
+
+            content.append(options, result);
+        }
+
+        /* ======================================
+           JUEGO ¿QUÉ PREFIERES?
+        ====================================== */
+
+        function showEither(content, surprise) {
+            let index = 0;
+
+            const area = element("div");
+
+            content.append(area);
+
+            function next() {
+                area.replaceChildren();
+
+                if (index >= surprise.questions.length) {
+                    paragraph(
+                        area,
+                        "Me encantó descubrir tus elecciones. ♡",
+                        "result"
+                    );
+
+                    return;
+                }
+
+                const question = surprise.questions[index];
+
+                index++;
+
+                paragraph(area, question[0]);
+
+                const options = element(
+                    "div",
+                    undefined,
+                    "options"
+                );
+
+                question.slice(1).forEach((choice) => {
+                    button(
+                        options,
+                        choice,
+                        () => {
+                            area.replaceChildren();
+
+                            paragraph(
+                                area,
+                                "¡Elegiste " + choice + "! ❤️",
+                                "result"
+                            );
+
+                            button(
+                                area,
+                                "Siguiente pregunta",
+                                next
+                            );
+                        },
+                        "option"
+                    );
+                });
+
+                area.append(options);
+            }
+
+            next();
+        }
+
+        /* ======================================
+           RULETA DE CITAS
+        ====================================== */
+
+        function showWheel(content, surprise) {
+            const wheel = element(
+                "div",
+                "♡",
+                "big"
+            );
+
+            content.append(wheel);
+
+            const result = element(
+                "p",
+                "¿Qué plan nos tocará?",
+                "result"
+            );
+
+            content.append(result);
+
+            let rotation = 0;
+
+            button(
+                content,
+                "Girar ruleta",
+                () => {
+                    rotation += 1080 + Math.random() * 360;
+
+                    wheel.style.transition = "transform 1s";
+                    wheel.style.transform =
+                        "rotate(" + rotation + "deg)";
+
+                    const randomIndex = Math.floor(
+                        Math.random() * surprise.choices.length
+                    );
+
+                    result.textContent =
+                        "Tu premio: " +
+                        surprise.choices[randomIndex] +
+                        " ♡";
+                }
+            );
+        }
+
+        /* ======================================
+           CUENTA REGRESIVA
+        ====================================== */
+
+        function showCountdown(content) {
+            const target = new Date(
+                CONFIG.year,
+                11,
+                20,
+                16,
+                0
+            );
+
+            const result = element(
+                "div",
+                "",
+                "big"
+            );
+
+            result.style.fontSize = "32px";
+
+            content.append(result);
+
+            function update() {
+                if (!result.isConnected) {
+                    return;
+                }
+
+                const difference = target - new Date();
+
+                if (difference <= 0) {
+                    result.textContent = "¡Llegó nuestro día! ❤️";
+                    return;
+                }
+
+                const days = Math.floor(
+                    difference / 86400000
+                );
+
+                const hours = Math.floor(
+                    (difference % 86400000) / 3600000
+                );
+
+                const minutes = Math.floor(
+                    (difference % 3600000) / 60000
+                );
+
+                result.textContent =
+                    days + " días · " +
+                    hours + " horas · " +
+                    minutes + " min";
+
+                setTimeout(update, 30000);
+            }
+
+            update();
+        }
+
+        /* ======================================
+           DÍA 20: DOMU SUSHI PUEBLA
+        ====================================== */
+
+        function showReservation(content, surprise) {
+            paragraph(content, surprise.text, "lead");
+
+            const ticket = element(
+                "div",
+                undefined,
+                "ticket"
+            );
+
+            ticket.append(
+                element("h2", "Domu Sushi Puebla")
+            );
+
+            paragraph(
+                ticket,
+                "Domingo 20 de diciembre de 2026"
+            );
+
+            paragraph(
+                ticket,
+                "🕓 4:00 p. m. · 2 personas"
+            );
+
+            paragraph(
+                ticket,
+                "✓ Reservación confirmada"
+            );
+
+            content.append(ticket);
+
+            picture(content, "reservacion.png");
+
+            paragraph(
+                content,
+                "Mi parte favorita del plan será compartirlo contigo. ♡"
+            );
+        }
+
+        /* ======================================
+           ABRIR LAS SORPRESAS
+        ====================================== */
+
+        function openDay(dayNumber) {
+            if (!available(dayNumber)) {
+                showLockedDay(dayNumber);
+                return;
+            }
+
+            const surprise = days[dayNumber - 1];
+
+            showModal(
+                "DÍA " +
+                String(dayNumber).padStart(2, "0") +
+                " · DICIEMBRE",
+                surprise.title,
+                (content) => {
+
+                    switch (surprise.type) {
+
+                        case "letter":
+                        case "final":
+                            paragraph(content, surprise.text, "lead");
+
+                            if (surprise.type === "final") {
+                                content.append(
+                                    element("div", "🎁❤️🎄", "big")
+                                );
+                            }
+                            break;
+
+                        case "photo":
+                            paragraph(content, surprise.text, "lead");
+                            picture(content, surprise.file);
+                            break;
+
+                        case "gallery":
+                            paragraph(content, surprise.text, "lead");
+
+                            surprise.files.forEach((file) => {
+                                picture(content, file);
+                            });
+                            break;
+
+                        case "flip":
+                            showFlips(content, surprise);
+                            break;
+
+                        case "quiz":
+                            showQuiz(content, surprise);
+                            break;
+
+                        case "coupon":
+                            showCoupon(content, surprise);
+                            break;
+
+                        case "anniversary":
+                            content.append(
+                                element("div", "10 meses ♡", "big")
+                            );
+
+                            paragraph(content, surprise.text, "lead");
+
+                            picture(content, surprise.file);
+                            break;
+
+                        case "date":
+                            showChoices(content, surprise);
+                            break;
+
+                        case "video":
+                            paragraph(content, surprise.text, "lead");
+                            addVideo(content, surprise.file);
+                            break;
+
+                        case "either":
+                            showEither(content, surprise);
+                            break;
+
+                        case "wheel":
+                            showWheel(content, surprise);
+                            break;
+
+                        case "flowers":
+                            paragraph(content, surprise.text, "lead");
+
+                            content.append(
+                                element("div", "🌹🌷🌸🌻", "big")
+                            );
+
+                            button(
+                                content,
+                                "Recibir mis flores",
+                                celebrate
+                            );
+                            break;
+
+                        case "countdown":
+                            paragraph(content, surprise.text, "lead");
+                            showCountdown(content);
+                            break;
+
+                        case "reservation":
+                            showReservation(content, surprise);
+                            break;
+                    }
+                }
+            );
+
+            if (!opened.includes(dayNumber)) {
+                opened.push(dayNumber);
+
+                saveLocal("calendario_pro_2026", opened);
+
+                renderCalendar();
+            }
+
+            if ([7, 20, 24].includes(dayNumber)) {
+                celebrate();
+            }
+        }
+
+        /* ======================================
+           EVENTOS DE LA APLICACIÓN
+        ====================================== */
+
+        $("start").addEventListener("click", () => {
+            $("welcome").classList.add("hidden");
+
+            $("calendar").classList.remove("hidden");
+
+            renderCalendar();
+        });
+
+        $("close").addEventListener("click", closeModal);
+
+        $("finish").addEventListener("click", closeModal);
+
+        $("overlay").addEventListener("click", (event) => {
+            if (event.target === $("overlay")) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+    </script>
+
+</body>
+</html>

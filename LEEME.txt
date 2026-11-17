@@ -1,0 +1,12 @@
+24 DÍAS CONTIGO ♡
+1. Abre index.html con Chrome o Edge.
+2. La foto original de la reservación está incluida en reservacion.png.
+3. Para personalizar fotos, agrega archivos con los nombres siguientes:
+   fotos/dia02.jpg, fotos/dia09a.jpg, fotos/dia09b.jpg, fotos/dia09c.jpg,
+   fotos/dia13.jpg, fotos/dia21a.jpg, fotos/dia21b.jpg.
+4. Para videos: videos/dia06.mp4, videos/dia11.mp4, videos/dia17.mp4.
+5. Cambia CONFIG.preview de true a false antes de compartir.
+6. El bloqueo usa el reloj del dispositivo, no es una protección de seguridad.
+7. Los cuestionarios contienen preguntas de ejemplo: personalízalas en la función quiz.
+8. El rompecabezas es numérico y no utiliza fotos.
+9. Para compartir por enlace, publica la carpeta en un hosting estático.
